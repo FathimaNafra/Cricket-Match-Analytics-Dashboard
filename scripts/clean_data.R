@@ -1,25 +1,44 @@
 library(tidyverse)
 
+# Load datasets
+matches <- read.csv("data/matches.csv")
+deliveries <- read.csv("data/deliveries.csv")
 
-matches<-read.csv("data/matches.csv")
-deliveries <- read_csv("data/deliveries.csv")
 
-#remove missing values
+# Remove duplicates only
 
-matches<-na.omit(matches)
-deliveries<-na.omit(deliveries)
-
-#remove duplicates
 
 matches <- distinct(matches)
 deliveries <- distinct(deliveries)
 
-#check missing values
-colSums(is.na(matches))
-colSums(is.na(deliveries))
 
-#save cleaned data
-write.csv(matches,"data/cleaned_matches.csv",row.names=FALSE)
-write.csv(deliveries,"data/cleaned_deliveries.csv",row.names=FALSE)
+# Remove rows where winner is missing
+
+
+matches <- matches %>%
+  filter(!is.na(winner))
+
+
+# Check missing values
+
+
+print(colSums(is.na(matches)))
+print(colSums(is.na(deliveries)))
+
+
+# Save cleaned datasets
+
+
+write.csv(
+  matches,
+  "data/cleaned_matches.csv",
+  row.names = FALSE
+)
+
+write.csv(
+  deliveries,
+  "data/cleaned_deliveries.csv",
+  row.names = FALSE
+)
 
 print("Data cleaning completed")
